@@ -4,21 +4,33 @@ import './Todos.css'
 import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
 
-const NO_FILTER = 'NO_FILTER'
-const ACTIVE_FILTER = 'ACTIVE_FILTER'
-const COMPLETED_FILET = 'COMPLETED_FILET'
+type Todo = {
+  isDone: boolean,
+  title: string
+}
+
+type TodosState = {
+  creatorValue: string,
+  editingIndex: number | null,
+  todos: Todo[]
+}
 
 class Todos extends Component {
-  state = {
+  state: TodosState = {
     creatorValue: '',
     editingIndex: null,
     todos: []
   }
 
-  addTodoHandler = event => {
-    if (event.keyCode === 13 && event.target.value !== '') {
+  addTodoHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13 &&
+      (event.target as HTMLInputElement).value !== ''
+    ) {
       const newTodos = this.state.todos.slice()
-      newTodos.unshift({ isDone: false, title: event.target.value })
+      newTodos.unshift({
+        isDone: false,
+        title: (event.target as HTMLInputElement).value
+      })
 
       this.setState({
         creatorValue: '',
@@ -27,7 +39,7 @@ class Todos extends Component {
     }
   }
   
-  removeTodo = removeIndex => {
+  removeTodo = (removeIndex: number) => {
     this.setState({
       todos: this.state.todos.filter((_, index) => index !== removeIndex)
     })
@@ -39,7 +51,7 @@ class Todos extends Component {
     })
   }
   
-  toggleStatus = toggleIndex => {
+  toggleStatus = (toggleIndex: number) => {
     this.setState({
       todos: this.state.todos.map((todo, index) => {
         if (index === toggleIndex) {
@@ -55,11 +67,11 @@ class Todos extends Component {
       .length > 0
   }
 
-  changeTodoInputHandler = event => {
+  changeTodoInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ creatorValue: event.target.value })
   }
 
-  startEditing = index => {
+  startEditing = (index: number) => {
     this.setState({ editingIndex: index })
   }
 
@@ -74,9 +86,9 @@ class Todos extends Component {
           key={index}
           isDone={todo.isDone}
           isEditing={index === this.state.editingIndex}
+          onRemoveTodo={() => this.removeTodo(index)}
           onStartEditing={() => this.startEditing(index)}
           onStopEditing={this.stopEditing}
-          onRemoveTodo={() => this.removeTodo(index)}
           onToggleTodo={() => this.toggleStatus(index)}
           title={todo.title}
         />
