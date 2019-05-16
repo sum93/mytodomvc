@@ -1,0 +1,16 @@
+.TodoCreator-input {
+  background-color: #282c34;
+  border-radius: 5px;
+  border: none;
+  box-sizing: border-box;
+  color: white;
+  font-size: 1em;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.TodoCreator-input:focus {
+  outline: none;
+}

@@ -1,0 +1,16 @@
+.Todos-article {
+  background-color: #888;
+  border-radius: 5px;
+  padding: 30px 50px;
+  width: 40%;
+}
+
+.Todos-removeAll {
+  display: block;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.Todos-removeAll:hover {
+  text-decoration: underline;
+}
