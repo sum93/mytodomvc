@@ -7,17 +7,24 @@ import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
 import { hasCompletedTodos } from '../store/reducer'
 
-class Todos extends Component {
-  state = {
+import { ApplicationState } from '../types'
+
+type TodosState = {
+  creatorValue: string,
+  editingIndex: number | null,
+  editingValue: string
+}
+
+class Todos extends Component<TodosState, TODO> {
+  state: TodosState = {
     creatorValue: '',
     editingIndex: null,
-    editingValue: '',
-    todos: []
+    editingValue: ''
   }
 
-  addTodoHandler = event => {
-    if (event.keyCode === 13 && event.target.value !== '') {
-      this.props.addTodo(event.target.value)
+  addTodoHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13 && (event.target as HTMLInputElement).value !== '') {
+      this.props.addTodo((event.target as HTMLInputElement).value)
       this.setState({
         creatorValue: ''
       })
@@ -84,12 +91,12 @@ class Todos extends Component {
   }
 }
 
-const mapStateToProps = store => ({
+const mapStateToProps = (store: ApplicationState) => ({
   hasCompletedTodos: hasCompletedTodos(store),
   todos: store.todos
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: React.Dispatch) => ({
   addTodo: title => dispatch(Actions.addTodo(title)),
   changeTodo: (index, title) => dispatch(Actions.changeTodo(index, title)),
   removeTodo: index => dispatch(Actions.removeTodo(index)),

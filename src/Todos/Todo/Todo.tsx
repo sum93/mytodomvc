@@ -3,11 +3,22 @@ import React from 'react'
 import './Todo.css'
 import cross from '../../assets/cross.svg'
 
-const addDoneIfRequired = (className, isDone) => {
+const addDoneIfRequired = (className: string, isDone: boolean): string => {
   return className + (isDone ? ' done' : '')
 }
 
-const todo = ({
+type TodoProps = {
+  isDone: boolean,
+  isEditing: boolean,
+  onChangeTodo: (event: React.ChangeEvent<HTMLInputElement>) => void,
+  onRemoveTodo: () => void,
+  onStartEditing: () => void,
+  onStopEditing: () => void,
+  onToggleTodo: (event: React.MouseEvent) => void,
+  title: string
+}
+
+const todo: React.FC<TodoProps> = ({
   isDone,
   isEditing,
   onChangeTodo,
@@ -17,7 +28,7 @@ const todo = ({
   onToggleTodo,
   title
 }) => {
-  const todo = isEditing ? (
+  const todoContent: JSX.Element = isEditing ? (
     <input
       className={addDoneIfRequired('Todo-input', isDone)}
       onBlur={onStopEditing}
@@ -38,7 +49,7 @@ const todo = ({
   return (
     <section className="Todo-section">
       <div onClick={onToggleTodo} className={addDoneIfRequired('Todo-status', isDone)} />
-      {todo}
+      {todoContent}
       <img
         alt="Delete Todo"
         className="Todo-cross"
