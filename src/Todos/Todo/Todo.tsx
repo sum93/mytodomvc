@@ -16,7 +16,7 @@ type TodoProps = {
   title: string
 }
 
-const todo = ({
+const todo: React.FC<TodoProps> = ({
   isDone,
   isEditing,
   onRemoveTodo,
@@ -24,7 +24,7 @@ const todo = ({
   onStopEditing,
   onToggleTodo,
   title
-}: TodoProps) => {
+}) => {
   return (
     <section className="Todo-section">
       <div

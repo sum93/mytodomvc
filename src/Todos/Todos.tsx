@@ -15,7 +15,7 @@ type TodosState = {
   todos: Todo[]
 }
 
-class Todos extends Component {
+class Todos extends Component<{}, TodosState> {
   state: TodosState = {
     creatorValue: '',
     editingIndex: null,

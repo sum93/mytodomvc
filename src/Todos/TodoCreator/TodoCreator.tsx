@@ -8,7 +8,7 @@ type TodoCreatorProps = {
   value: string
 }
 
-const todoCreator = ({ onAddTodo, onChange, value }: TodoCreatorProps) => {
+const todoCreator: React.FC<TodoCreatorProps> = ({ onAddTodo, onChange, value }) => {
   return (
     <input
       onKeyDown={onAddTodo}
