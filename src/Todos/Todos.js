@@ -1,54 +1,27 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import './Todos.css'
+import * as Actions from '../store/actions' 
 import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
+import { hasCompletedTodos } from '../store/reducer'
 
 class Todos extends Component {
   state = {
     creatorValue: '',
     editingIndex: null,
+    editingValue: '',
     todos: []
   }
 
   addTodoHandler = event => {
     if (event.keyCode === 13 && event.target.value !== '') {
-      const newTodos = this.state.todos.slice()
-      newTodos.unshift({ isDone: false, title: event.target.value })
-
+      this.props.addTodo(event.target.value)
       this.setState({
-        creatorValue: '',
-        todos: newTodos
+        creatorValue: ''
       })
     }
-  }
-  
-  removeTodo = removeIndex => {
-    this.setState({
-      todos: this.state.todos.filter((_, index) => index !== removeIndex)
-    })
-  }
-  
-  removeAllDoneTodos = () => {
-    this.setState({
-      todos: this.state.todos.filter((todo) => !todo.isDone)
-    })
-  }
-  
-  toggleStatus = toggleIndex => {
-    this.setState({
-      todos: this.state.todos.map((todo, index) => {
-        if (index === toggleIndex) {
-          return { ...todo, isDone: !todo.isDone }
-        }
-        return todo
-      })
-    })
-  }
-
-  hasCompleted = () => {
-    return this.state.todos.filter(todo => todo.isDone)
-      .length > 0
   }
 
   changeTodoCreatorInputHandler = event => {
@@ -56,37 +29,38 @@ class Todos extends Component {
   }
 
   changeTodoInputHandler = event => {
-    this.setState({
-      todos: this.state.todos.map((todo, index) => {
-        if (index === this.state.editingIndex) {
-          return { ...todo, title: event.target.value }
-        }
-        return todo
-      })
-    })
+    this.setState({ editingValue: event.target.value })
   }
 
   startEditing = index => {
-    this.setState({ editingIndex: index })
+    this.setState({
+      editingIndex: index,
+      editingValue: this.props.todos[index].title
+    })
   }
 
   stopEditing = () => {
-    this.setState({ editingIndex: null })
+    this.props.changeTodo(this.state.editingIndex, this.state.editingValue)
+    this.setState({
+      editingIndex: null,
+      editingValue: ''
+    })
   }
 
   render() {
-    const todos = this.state.todos.map((todo, index) => {
+    const todos = this.props.todos.map((todo, index) => {
+      const isEditing = index === this.state.editingIndex
       return (
         <Todo
           key={index}
           isDone={todo.isDone}
           onChangeTodo={this.changeTodoInputHandler}
-          isEditing={index === this.state.editingIndex}
-          onRemoveTodo={() => this.removeTodo(index)}
+          isEditing={isEditing}
+          onRemoveTodo={() => this.props.removeTodo(index)}
           onStartEditing={() => this.startEditing(index)}
           onStopEditing={this.stopEditing}
-          onToggleTodo={() => this.toggleStatus(index)}
-          title={todo.title}
+          onToggleTodo={() => this.props.toggleTodo(index)}
+          title={isEditing ? this.state.editingValue : todo.title}
         />
       )
     })
@@ -99,9 +73,9 @@ class Todos extends Component {
           value={this.state.creatorValue}
         />
         {todos}
-        {this.hasCompleted() ? <span
+        {this.props.hasCompletedTodos ? <span
           className="Todos-removeAll"
-          onClick={this.removeAllDoneTodos}
+          onClick={this.props.removeAllDoneTodos}
         >
           Delete all done
         </span> : null}
@@ -110,4 +84,17 @@ class Todos extends Component {
   }
 }
 
-export default Todos
+const mapStateToProps = store => ({
+  hasCompletedTodos: hasCompletedTodos(store),
+  todos: store.todos
+})
+
+const mapDispatchToProps = dispatch => ({
+  addTodo: title => dispatch(Actions.addTodo(title)),
+  changeTodo: (index, title) => dispatch(Actions.changeTodo(index, title)),
+  removeTodo: index => dispatch(Actions.removeTodo(index)),
+  removeAllDoneTodos: () => dispatch(Actions.removeAllDoneTodo()),
+  toggleTodo: index => dispatch(Actions.toggleTodo(index))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Todos)
