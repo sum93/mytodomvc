@@ -4,10 +4,6 @@ import './Todos.css'
 import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
 
-const NO_FILTER = 'NO_FILTER'
-const ACTIVE_FILTER = 'ACTIVE_FILTER'
-const COMPLETED_FILET = 'COMPLETED_FILET'
-
 class Todos extends Component {
   state = {
     creatorValue: '',
@@ -55,8 +51,19 @@ class Todos extends Component {
       .length > 0
   }
 
-  changeTodoInputHandler = event => {
+  changeTodoCreatorInputHandler = event => {
     this.setState({ creatorValue: event.target.value })
+  }
+
+  changeTodoInputHandler = event => {
+    this.setState({
+      todos: this.state.todos.map((todo, index) => {
+        if (index === this.state.editingIndex) {
+          return { ...todo, title: event.target.value }
+        }
+        return todo
+      })
+    })
   }
 
   startEditing = index => {
@@ -73,10 +80,11 @@ class Todos extends Component {
         <Todo
           key={index}
           isDone={todo.isDone}
+          onChangeTodo={this.changeTodoInputHandler}
           isEditing={index === this.state.editingIndex}
+          onRemoveTodo={() => this.removeTodo(index)}
           onStartEditing={() => this.startEditing(index)}
           onStopEditing={this.stopEditing}
-          onRemoveTodo={() => this.removeTodo(index)}
           onToggleTodo={() => this.toggleStatus(index)}
           title={todo.title}
         />
@@ -87,7 +95,7 @@ class Todos extends Component {
       <article className="Todos-article">
         <TodoCreator
           onAddTodo={this.addTodoHandler}
-          onChange={this.changeTodoInputHandler}
+          onChange={this.changeTodoCreatorInputHandler}
           value={this.state.creatorValue}
         />
         {todos}

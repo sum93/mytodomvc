@@ -3,8 +3,23 @@
   background-color: #282c34;
   border-radius: 5px;
   display: flex;
+  height: 21px;
   margin: 10px 0;
   padding: 10px;
+}
+
+.Todo-input {
+  background-color: #282c34;
+  border: none;
+  color: white;
+  font-size: 1em;
+  padding: 0 5px;
+  text-align: left;
+  width: 100%;
+}
+
+.Todo-input:focus {
+  outline: none;
 }
 
 .Todo-title {
