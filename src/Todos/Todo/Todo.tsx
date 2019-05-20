@@ -8,13 +8,13 @@ const addDoneIfRequired = (className: string, isDone: boolean): string => {
 }
 
 type TodoProps = {
-  isDone: boolean,
-  isEditing: boolean,
-  onChangeTodo: (event: React.ChangeEvent<HTMLInputElement>) => void,
-  onRemoveTodo: () => void,
-  onStartEditing: () => void,
-  onStopEditing: () => void,
-  onToggleTodo: (event: React.MouseEvent) => void,
+  isDone: boolean
+  isEditing: boolean
+  onChangeTodo: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onRemoveTodo: () => void
+  onStartEditing: () => void
+  onStopEditing: () => void
+  onToggleTodo: (event: React.MouseEvent) => void
   title: string
 }
 
@@ -48,7 +48,10 @@ const todo: React.FC<TodoProps> = ({
 
   return (
     <section className="Todo-section">
-      <div onClick={onToggleTodo} className={addDoneIfRequired('Todo-status', isDone)} />
+      <div
+        onClick={onToggleTodo}
+        className={addDoneIfRequired('Todo-status', isDone)}
+      />
       {todoContent}
       <img
         alt="Delete Todo"

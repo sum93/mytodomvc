@@ -1,17 +1,24 @@
 import * as actionTypes from './actionTypes'
+import { ApplicationState } from '../types'
 
-const initialStore = {
+const initialStore: ApplicationState = {
   todos: []
 }
 
-const addTodo = (store, action) => {
+const addTodo = (
+  store: ApplicationState,
+  action: actionTypes.AddTodoAction
+): ApplicationState => {
   const newTodos = store.todos.slice()
   newTodos.unshift({ isDone: false, title: action.payload.title })
 
   return { ...store, todos: newTodos }
 }
 
-const changeTodo = (store, action) => {
+const changeTodo = (
+  store: ApplicationState,
+  action: actionTypes.ChangeTodoAction
+): ApplicationState => {
   const newTodos = store.todos.map((todo, index) => {
     if (index === action.payload.index) {
       return { ...todo, title: action.payload.title }
@@ -21,18 +28,24 @@ const changeTodo = (store, action) => {
 
   return { ...store, todos: newTodos }
 }
-  
-const removeAllDoneTodos = store => ({
+
+const removeAllDoneTodos = (store: ApplicationState): ApplicationState => ({
   ...store,
   todos: store.todos.filter(todo => !todo.isDone)
 })
 
-const removeTodo = (store, action) => ({
+const removeTodo = (
+  store: ApplicationState,
+  action: actionTypes.RemoveTodoAction
+): ApplicationState => ({
   ...store,
   todos: store.todos.filter((_, index) => index !== action.payload.index)
 })
 
-const toggleTodo = (store, action) => {
+const toggleTodo = (
+  store: ApplicationState,
+  action: actionTypes.ToggleTodoAction
+): ApplicationState => {
   const newTodos = store.todos.map((todo, index) => {
     if (index === action.payload.index) {
       return { ...todo, isDone: !todo.isDone }
@@ -46,8 +59,11 @@ const toggleTodo = (store, action) => {
   }
 }
 
-const reducer = (store = initialStore, action) => {
-  switch(action.type) {
+const reducer = (
+  store: ApplicationState = initialStore,
+  action: actionTypes.ActionType
+): ApplicationState => {
+  switch (action.type) {
     case actionTypes.ADD_TODO:
       return addTodo(store, action)
     case actionTypes.CHANGE_TODO:
@@ -64,7 +80,7 @@ const reducer = (store = initialStore, action) => {
   }
 }
 
-export const hasCompletedTodos = store => {
+export const hasCompletedTodos = (store: ApplicationState): boolean => {
   return store.todos.filter(todo => todo.isDone).length > 0
 }
 

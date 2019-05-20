@@ -8,6 +8,7 @@
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
     "@types/react-redux": "^7.0.9",
+    "@types/redux-logger": "^3.0.7",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.3",
@@ -20,10 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "prettier": "./node_modules/.bin/prettier"
   },
   "browserslist": {
     "production": [
@@ -36,5 +35,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

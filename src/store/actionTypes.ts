@@ -32,8 +32,8 @@ export interface ToggleTodoAction {
 }
 
 export type ActionType =
-  AddTodoAction |
-  ChangeTodoAction |
-  RemoveAllDoneTodosAction |
-  RemoveTodoAction |
-  ToggleTodoAction
+  | AddTodoAction
+  | ChangeTodoAction
+  | RemoveAllDoneTodosAction
+  | RemoveTodoAction
+  | ToggleTodoAction

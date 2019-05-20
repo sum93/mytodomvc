@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import './Todos.css'
-import * as Actions from '../store/actions' 
+import * as Actions from '../store/actions'
 import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
 import { hasCompletedTodos } from '../store/reducer'
@@ -39,7 +39,10 @@ class Todos extends Component<TodosProps, TodosState> {
   }
 
   addTodoHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === 13 && (event.target as HTMLInputElement).value !== '') {
+    if (
+      event.keyCode === 13 &&
+      (event.target as HTMLInputElement).value !== ''
+    ) {
       this.props.addTodo((event.target as HTMLInputElement).value)
       this.setState({
         creatorValue: ''
@@ -47,11 +50,15 @@ class Todos extends Component<TodosProps, TodosState> {
     }
   }
 
-  changeTodoCreatorInputHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  changeTodoCreatorInputHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     this.setState({ creatorValue: event.target.value })
   }
 
-  changeTodoInputHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  changeTodoInputHandler = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     this.setState({ editingValue: event.target.value })
   }
 
@@ -63,7 +70,7 @@ class Todos extends Component<TodosProps, TodosState> {
   }
 
   stopEditing = (): void => {
-    if(this.state.editingIndex) {
+    if (this.state.editingIndex) {
       this.props.changeTodo(this.state.editingIndex, this.state.editingValue)
       this.setState({
         editingIndex: null,
@@ -98,12 +105,14 @@ class Todos extends Component<TodosProps, TodosState> {
           value={this.state.creatorValue}
         />
         {todos}
-        {this.props.hasCompletedTodos ? <span
-          className="Todos-removeAll"
-          onClick={this.props.removeAllDoneTodos}
-        >
-          Delete all done
-        </span> : null}
+        {this.props.hasCompletedTodos ? (
+          <span
+            className="Todos-removeAll"
+            onClick={this.props.removeAllDoneTodos}
+          >
+            Delete all done
+          </span>
+        ) : null}
       </article>
     )
   }
@@ -114,7 +123,9 @@ const mapStateToProps = (state: ApplicationState): StateProps => ({
   todos: state.todos
 })
 
-const mapDispatchToProps = (dispatch: React.Dispatch<ActionType>): DispatchProps => ({
+const mapDispatchToProps = (
+  dispatch: React.Dispatch<ActionType>
+): DispatchProps => ({
   addTodo: title => dispatch(Actions.addTodo(title)),
   changeTodo: (index, title) => dispatch(Actions.changeTodo(index, title)),
   removeTodo: index => dispatch(Actions.removeTodo(index)),
@@ -122,4 +133,7 @@ const mapDispatchToProps = (dispatch: React.Dispatch<ActionType>): DispatchProps
   toggleTodo: index => dispatch(Actions.toggleTodo(index))
 })
 
-export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, mapDispatchToProps)(Todos)
+export default connect<StateProps, DispatchProps, {}, ApplicationState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Todos)

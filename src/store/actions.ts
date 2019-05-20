@@ -5,7 +5,10 @@ export const addTodo = (title: string): actionTypes.AddTodoAction => ({
   payload: { title: title }
 })
 
-export const changeTodo = (index: number, title: string): actionTypes.ChangeTodoAction => ({
+export const changeTodo = (
+  index: number,
+  title: string
+): actionTypes.ChangeTodoAction => ({
   type: actionTypes.CHANGE_TODO,
   payload: {
     index: index,
