@@ -1,8 +1,8 @@
-export interface Todo {
+export interface TodoType {
   isDone: boolean
   title: string
 }
 
 export interface ApplicationState {
-  todos: Todo[]
+  todos: TodoType[]
 }

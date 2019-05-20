@@ -7,15 +7,31 @@ import Todo from './Todo/Todo'
 import TodoCreator from './TodoCreator/TodoCreator'
 import { hasCompletedTodos } from '../store/reducer'
 
-import { ApplicationState } from '../types'
+import { ActionType } from '../store/actionTypes'
+import { ApplicationState, TodoType } from '../types'
 
-type TodosState = {
-  creatorValue: string,
-  editingIndex: number | null,
+interface TodosState {
+  creatorValue: string
+  editingIndex: number | null
   editingValue: string
 }
 
-class Todos extends Component<TodosState, TODO> {
+interface StateProps {
+  hasCompletedTodos: boolean
+  todos: TodoType[]
+}
+
+interface DispatchProps {
+  addTodo: (title: string) => void
+  changeTodo: (index: number, title: string) => void
+  removeTodo: (index: number) => void
+  removeAllDoneTodos: () => void
+  toggleTodo: (index: number) => void
+}
+
+type TodosProps = StateProps & DispatchProps
+
+class Todos extends Component<TodosProps, TodosState> {
   state: TodosState = {
     creatorValue: '',
     editingIndex: null,
@@ -31,27 +47,29 @@ class Todos extends Component<TodosState, TODO> {
     }
   }
 
-  changeTodoCreatorInputHandler = event => {
+  changeTodoCreatorInputHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ creatorValue: event.target.value })
   }
 
-  changeTodoInputHandler = event => {
+  changeTodoInputHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({ editingValue: event.target.value })
   }
 
-  startEditing = index => {
+  startEditing = (index: number): void => {
     this.setState({
       editingIndex: index,
       editingValue: this.props.todos[index].title
     })
   }
 
-  stopEditing = () => {
-    this.props.changeTodo(this.state.editingIndex, this.state.editingValue)
-    this.setState({
-      editingIndex: null,
-      editingValue: ''
-    })
+  stopEditing = (): void => {
+    if(this.state.editingIndex) {
+      this.props.changeTodo(this.state.editingIndex, this.state.editingValue)
+      this.setState({
+        editingIndex: null,
+        editingValue: ''
+      })
+    }
   }
 
   render() {
@@ -91,17 +109,17 @@ class Todos extends Component<TodosState, TODO> {
   }
 }
 
-const mapStateToProps = (store: ApplicationState) => ({
-  hasCompletedTodos: hasCompletedTodos(store),
-  todos: store.todos
+const mapStateToProps = (state: ApplicationState): StateProps => ({
+  hasCompletedTodos: hasCompletedTodos(state),
+  todos: state.todos
 })
 
-const mapDispatchToProps = (dispatch: React.Dispatch) => ({
+const mapDispatchToProps = (dispatch: React.Dispatch<ActionType>): DispatchProps => ({
   addTodo: title => dispatch(Actions.addTodo(title)),
   changeTodo: (index, title) => dispatch(Actions.changeTodo(index, title)),
   removeTodo: index => dispatch(Actions.removeTodo(index)),
-  removeAllDoneTodos: () => dispatch(Actions.removeAllDoneTodo()),
+  removeAllDoneTodos: () => dispatch(Actions.removeAllDoneTodos()),
   toggleTodo: index => dispatch(Actions.toggleTodo(index))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Todos)
+export default connect<StateProps, DispatchProps, {}, ApplicationState>(mapStateToProps, mapDispatchToProps)(Todos)
